@@ -124,7 +124,7 @@ func (c *Client) Build(params map[string]interface{}) (api.ClientAPI, error) {
 	_ = identityEndpoint
 
 	region, _ := compute["Region"].(string)
-	defaultImage, _ := compute["DefaultImage"]
+	defaultImage := compute["DefaultImage"]
 	_ = defaultImage
 
 	return AuthenticatedClient(

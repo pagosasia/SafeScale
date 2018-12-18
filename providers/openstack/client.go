@@ -431,7 +431,7 @@ func (client *Client) Build(params map[string]interface{}) (api.ClientAPI, error
 
 	region, _ := compute["Region"].(string)
 	floatingIPPool, _ := compute["FloatingIPPool"].(string)
-	defaultImage, _ := compute["DefaultImage"]
+	defaultImage := compute["DefaultImage"]
 
 	return AuthenticatedClient(
 		AuthOptions{

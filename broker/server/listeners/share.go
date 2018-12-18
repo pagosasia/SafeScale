@@ -168,7 +168,6 @@ func (s *ShareListener) Unmount(ctx context.Context, in *pb.ShareMountDefinition
 	return &google_protobuf.Empty{}, nil
 }
 
-
 // Inspect shows the detail of a share and all connected clients
 func (s *ShareListener) Inspect(ctx context.Context, in *pb.Reference) (*pb.ShareMountList, error) {
 	shareName := in.GetName()
@@ -184,8 +183,8 @@ func (s *ShareListener) Inspect(ctx context.Context, in *pb.Reference) (*pb.Shar
 	handler := ShareHandler(tenant.Service)
 	host, share, mounts, err := handler.Inspect(shareName)
 	if err != nil {
-		err := errors.Wrap(err, fmt.Sprintf("can't inspect share '%s'", shareName))
-		return nil, grpc.Errorf(codes.Internal, err.Error())
+		nerr := errors.Wrap(err, fmt.Sprintf("can't inspect share '%s'", shareName))
+		return nil, grpc.Errorf(codes.Internal, nerr.Error())
 	}
 	if host == nil {
 		return nil, model.ResourceNotFoundError("host", "host:"+shareName)

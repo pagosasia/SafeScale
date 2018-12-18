@@ -87,7 +87,7 @@ func ListFeatures() ([]interface{}, error) {
 			files, err := ioutil.ReadDir(path)
 			if err == nil {
 				for _, f := range files {
-					if isCfgFile := strings.HasSuffix(strings.ToLower(f.Name()), ".yml"); isCfgFile == true {
+					if isCfgFile := strings.HasSuffix(strings.ToLower(f.Name()), ".yml"); isCfgFile {
 						cfgFiles.Add(strings.Replace(strings.ToLower(f.Name()), ".yml", "", 1))
 					}
 				}

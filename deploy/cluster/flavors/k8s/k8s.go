@@ -1162,7 +1162,7 @@ func (c *Cluster) AddNodes(count int, public bool, req *pb.HostDefinition) ([]st
 				}(hostID, d)
 			}
 			for _, d := range dones {
-				_ = <-d
+				<-d
 			}
 		}
 		return nil, fmt.Errorf("errors occured on node addition: %s", strings.Join(errors, "\n"))

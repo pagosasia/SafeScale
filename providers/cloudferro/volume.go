@@ -178,7 +178,7 @@ func (client *Client) DeleteVolume(id string) error {
 	retryErr := retry.WhileUnsuccessfulDelay5Seconds(
 		func() error {
 			r := volumes.Delete(client.Client.Volume, id, nil)
-			err := r.ExtractErr()
+			err = r.ExtractErr()
 			if err != nil {
 				switch err.(type) {
 				case gc.ErrDefault400:

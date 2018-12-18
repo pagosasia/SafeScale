@@ -390,7 +390,7 @@ func (client *Client) GetHost(hostParam interface{}) (*model.Host, error) {
 
 	switch hostParam.(type) {
 	case string:
-		host := model.NewHost()
+		host = model.NewHost()
 		host.ID = hostParam.(string)
 	case *model.Host:
 		host = hostParam.(*model.Host)
@@ -497,6 +497,14 @@ func (client *Client) interpretAddresses(
 func (client *Client) complementHost(host *model.Host, server *servers.Server) error {
 	if client == nil {
 		panic("No client set")
+	}
+
+	if host == nil {
+		panic("host cannot be nil")
+	}
+
+	if server == nil {
+		panic("server cannot be nil")
 	}
 
 	networks, addresses, ipv4, ipv6 := client.interpretAddresses(server.Addresses)

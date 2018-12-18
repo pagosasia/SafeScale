@@ -71,13 +71,13 @@ func (s *ssh) Run(hostName, command string, connectionTimeout, executionTimeout 
 		func() error {
 			// Create the command
 			var sshCmd *system.SSHCommand
-			sshCmd, err := sshCfg.Command(command)
+			sshCmd, cmdErr := sshCfg.Command(command)
 			if err != nil {
 				return err
 			}
-			retcode, stdout, stderr, err = sshCmd.Run()
+			retcode, stdout, stderr, cmdErr = sshCmd.Run()
 			// If an error occured, stop the loop and propagates this error
-			if err != nil {
+			if cmdErr != nil {
 				retcode = -1
 				return nil
 			}

@@ -495,9 +495,7 @@ func (client *Client) listSubnets() (*[]subnets.Subnet, error) {
 			return false, fmt.Errorf("Error listing subnets: %s", openstack.ProviderErrorToString(err))
 		}
 
-		for _, subnet := range list {
-			subnetList = append(subnetList, subnet)
-		}
+		subnetList = append(subnetList, list...)
 		return true, nil
 	})
 

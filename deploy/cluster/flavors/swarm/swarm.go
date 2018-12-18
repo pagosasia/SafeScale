@@ -304,13 +304,13 @@ func Create(req core.Request) (*Cluster, error) {
 
 	//VPL: Disabling proxy-cache always for now
 	instance.Core.DisabledFeatures["proxycache"] = struct{}{}
-	if _, ok := instance.Core.DisabledFeatures["proxycache"]; !ok {
+	if _, okProxy := instance.Core.DisabledFeatures["proxycache"]; !okProxy {
 		feature, err = install.NewFeature("proxycache-server")
 		if err != nil {
 			goto cleanNetwork
 		}
-		target := install.NewHostTarget(pbutils.ToPBHost(gw))
-		results, err = feature.Add(target, install.Variables{}, install.Settings{})
+		newTarget := install.NewHostTarget(pbutils.ToPBHost(gw))
+		results, err = feature.Add(newTarget, install.Variables{}, install.Settings{})
 		if err != nil {
 			goto cleanNetwork
 		}
@@ -1293,11 +1293,11 @@ func (c *Cluster) deleteSwarmWorker(hostRef string, selectedMaster string) error
 		cmd = fmt.Sprintf("docker node ls --format \"{{.Status}}\" --filter \"name=%s\" | grep -i down", host.Name)
 		retryErr := retry.WhileUnsuccessfulDelay5Seconds(
 			func() error {
-				retcode, _, _, err := clt.Ssh.Run(selectedMaster, cmd, brokerclient.DefaultConnectionTimeout, brokerclient.DefaultExecutionTimeout)
+				delayretcode, _, _, err := clt.Ssh.Run(selectedMaster, cmd, brokerclient.DefaultConnectionTimeout, brokerclient.DefaultExecutionTimeout)
 				if err != nil {
 					return err
 				}
-				if retcode != 0 {
+				if delayretcode != 0 {
 					return fmt.Errorf("'%s' not in Down state", host.Name)
 				}
 				return nil

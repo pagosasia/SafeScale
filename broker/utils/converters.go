@@ -173,21 +173,21 @@ func ToPBHost(in *model.Host) *pb.Host {
 	}
 
 	var volumes []string
-	for k, _ := range hostVolumesV1.VolumesByName {
+	for k := range hostVolumesV1.VolumesByName {
 		volumes = append(volumes, k)
 	}
 
 	return &pb.Host{
-		CPU:        int32(hostSizingV1.AllocatedSize.Cores),
-		Disk:       int32(hostSizingV1.AllocatedSize.DiskSize),
-		GatewayID:  hostNetworkV1.DefaultGatewayID,
-		ID:         in.ID,
-		PublicIP:   in.GetPublicIP(),
-		PrivateIP:  in.GetPrivateIP(),
-		Name:       in.Name,
-		PrivateKey: in.PrivateKey,
-		RAM:        hostSizingV1.AllocatedSize.RAMSize,
-		State:      pb.HostState(in.LastState),
+		CPU:                 int32(hostSizingV1.AllocatedSize.Cores),
+		Disk:                int32(hostSizingV1.AllocatedSize.DiskSize),
+		GatewayID:           hostNetworkV1.DefaultGatewayID,
+		ID:                  in.ID,
+		PublicIP:            in.GetPublicIP(),
+		PrivateIP:           in.GetPrivateIP(),
+		Name:                in.Name,
+		PrivateKey:          in.PrivateKey,
+		RAM:                 hostSizingV1.AllocatedSize.RAMSize,
+		State:               pb.HostState(in.LastState),
 		AttachedVolumeNames: volumes,
 	}
 }

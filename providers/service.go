@@ -529,7 +529,7 @@ func (svc *Service) GetObject(bucketName string, objectName string, ranges []mod
 	if err != nil {
 		return nil, err
 	}
-	if ranges == nil || len(ranges) == 0 {
+	if len(ranges) == 0 {
 		r := model.NewRange(0, 0)
 		ranges = []model.Range{r}
 	}

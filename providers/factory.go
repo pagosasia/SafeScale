@@ -236,8 +236,13 @@ func initObjectStorageLocationConfig(tenant map[string]interface{}) (objectstora
 		}
 	}
 
-	config.AuthURL, _ = objectstorage["AuthURL"].(string)
-	config.Endpoint, _ = objectstorage["Endpoint"].(string)
+	if config.AuthURL, ok = objectstorage["AuthURL"].(string); !ok {
+		log.Debugf("Failure setting 'AuthURL' aliases")
+	}
+
+	if config.Endpoint, ok  = objectstorage["Endpoint"].(string); !ok {
+		log.Debugf("Failure setting 'Endpoint' aliases")
+	}
 
 	if config.User, ok = objectstorage["AccessKey"].(string); !ok {
 		if config.User, ok = objectstorage["OpenStackID"].(string); !ok {

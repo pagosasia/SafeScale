@@ -726,7 +726,7 @@ func (c *Client) GetHost(hostParam interface{}) (*model.Host, error) {
 
 	switch hostParam.(type) {
 	case string:
-		host := model.NewHost()
+		host = model.NewHost()
 		host.ID = hostParam.(string)
 	case *model.Host:
 		host = hostParam.(*model.Host)

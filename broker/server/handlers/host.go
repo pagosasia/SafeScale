@@ -349,7 +349,7 @@ func (svc *HostHandler) Create(
 	creator := ""
 	hostname, _ := os.Hostname()
 	if curUser, err := user.Current(); err == nil {
-		creator := curUser.Username
+		creator = curUser.Username
 		if hostname != "" {
 			creator += "@" + hostname
 		}

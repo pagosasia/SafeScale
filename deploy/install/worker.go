@@ -18,10 +18,11 @@ package install
 
 import (
 	"fmt"
-	"github.com/CS-SI/SafeScale/providers/model"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/CS-SI/SafeScale/providers/model"
 
 	log "github.com/sirupsen/logrus"
 
@@ -500,7 +501,7 @@ func (w *worker) Proceed(v Variables, s Settings) (Results, error) {
 			}
 		}
 
-		step := step{
+		lastStep := step{
 			Worker:             w,
 			Name:               k,
 			Action:             w.action,
@@ -511,7 +512,7 @@ func (w *worker) Proceed(v Variables, s Settings) (Results, error) {
 			YamlKey:            stepKey,
 			Serial:             serial,
 		}
-		results[k], err = step.Run(hostsList, w.variables, w.settings)
+		results[k], err = lastStep.Run(hostsList, w.variables, w.settings)
 		// If an error occured, don't do the remaining steps, fail immediately
 		if err != nil {
 			break

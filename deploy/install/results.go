@@ -71,8 +71,8 @@ func (r Results) ErrorMessagesOfHost(name string) string {
 	return output
 }
 
-// ResultsOfStep ...
-func (r Results) ResultsOfStep(name string) stepResults {
+// resultsOfStep ...
+func (r Results) resultsOfStep(name string) stepResults {
 	if step, ok := r[name]; ok {
 		return step
 	}

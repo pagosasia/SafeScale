@@ -529,8 +529,8 @@ func (client *Client) CreateHost(request model.HostRequest) (*model.Host, error)
 }
 
 // ResizeHost creates an host satisfying request
-func (client *Client) ResizeHost(id string, request model.SizingRequirements) (*model.Host, error) {
-	return client.osclt.ResizeHost(id, request)
+func (client *Client) ResizeHost(id string, templateID string) (*model.Host, error) {
+	return client.osclt.ResizeHost(id, templateID)
 }
 
 // validatehostName validates the name of an host based on known FlexibleEngine requirements

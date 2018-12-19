@@ -1215,7 +1215,7 @@ func (client *Client) StartHost(id string) error {
 	return nil
 }
 
-func (client *Client) ResizeHost(id string, request model.SizingRequirements) (*model.Host, error) {
+func (client *Client) ResizeHost(id string, templateID string) (*model.Host, error) {
 	log.Debugf("openstack.Client.ResizeHost(%s) called", id)
 	defer log.Debugf("openstack.Client.ResizeHost(%s) done", id)
 
@@ -1225,9 +1225,15 @@ func (client *Client) ResizeHost(id string, request model.SizingRequirements) (*
 
 	// TODO RESIZE Implement Resize Host HERE
 	log.Warn("Trying to resize a Host...")
+	opts := &servers.ResizeOpts{
+		FlavorRef: templateID,
+	}
 
-	// TODO RESIZE Call this
-	// servers.Resize()
+	err := servers.Resize(client.Compute, id, opts).ExtractErr()
+	if err != nil {
+		log.Debugf("Error resizing host '%s': %+v", id, err)
+		return nil, errors.Wrap(err, fmt.Sprintf("Error resizing host '%s': %s", id, ProviderErrorToString(err)))
+	}
 
 	return nil, errors.New("Not implemented yet !")
 }

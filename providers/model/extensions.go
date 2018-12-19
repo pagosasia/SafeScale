@@ -64,6 +64,14 @@ func (x *Extensions) Get(key string, value interface{}) error {
 }
 
 func (x *Extensions) SafeGet(key string, value interface{}) error {
+	if x == nil {
+		panic("Nil Extensions")
+	}
+
+	if x.extensions == nil {
+		panic("Nil Extensions.extensions")
+	}
+
 	if jsoned, ok := x.extensions[key]; ok {
 		return json.Unmarshal([]byte(jsoned), value)
 	}

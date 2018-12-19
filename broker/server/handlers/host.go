@@ -190,7 +190,22 @@ func (svc *HostHandler) Resize(ref string, cpu int, ram float32, disk int, gpuNu
 		log.Warn("Asking for less resources..., ain't gonna happen :(")
 	}
 
-	newHost, err := svc.provider.ResizeHost(id, hostSizeRequest)
+	// TODO RESIZE Get TemplateID from SizingRequirements
+	templates, err := svc.provider.SelectTemplatesBySize(
+		model.SizingRequirements{
+			MinCores:    hostSizeRequest.MinCores,
+			MinRAMSize:  hostSizeRequest.MinRAMSize,
+			MinDiskSize: hostSizeRequest.MinDiskSize,
+			MinGPU:      hostSizeRequest.MinGPU,
+			MinFreq:     hostSizeRequest.MinFreq,
+		}, true)
+
+	if len(templates) == 0 {
+		return nil, throwErrf("No templates found matching requirements")
+	}
+
+	flavorID := templates[0].ID
+	newHost, err := svc.provider.ResizeHost(id, flavorID)
 
 	if err != nil {
 		return nil, infraErrf(err, "Error resizing host '%s'", ref)

@@ -60,7 +60,7 @@ func (c *Client) RebootHost(id string) error {
 }
 
 // ResizeHost ...
-func (c *Client) ResizeHost(id string, request model.SizingRequirements) (*model.Host, error) {
+func (c *Client) ResizeHost(id string, templateID string) (*model.Host, error) {
 	panic("ResizeHost() not implemented")
 }
 

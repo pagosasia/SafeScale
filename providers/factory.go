@@ -292,6 +292,7 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 		ok     bool
 	)
 
+	// TODO Log errors
 	identity, _ := tenant["identity"].(map[string]interface{})
 	compute, _ := tenant["compute"].(map[string]interface{})
 	objectstorage, _ := tenant["objectstorage"].(map[string]interface{})
@@ -310,7 +311,9 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 					if config.Domain, ok = compute["Domain"].(string); !ok {
 						if config.Domain, ok = compute["DomainName"].(string); !ok {
 							if config.Domain, ok = identity["Domain"].(string); !ok {
-								config.Domain, _ = identity["DomainName"].(string)
+								if config.Domain, ok = identity["DomainName"].(string); !ok {
+									log.Debugf("Failure setting 'Domain Name' aliases")
+								}
 							}
 						}
 					}
@@ -328,7 +331,9 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 						if config.Tenant, ok = objectstorage["ProjectID"].(string); !ok {
 							if config.Tenant, ok = compute["Tenant"].(string); !ok {
 								if config.Tenant, ok = compute["ProjectName"].(string); !ok {
-									config.Tenant, _ = compute["ProjectID"].(string)
+									if config.Tenant, ok = compute["ProjectID"].(string); ! ok {
+										log.Debugf("Failure setting 'Project ID' aliases")
+									}
 								}
 							}
 						}

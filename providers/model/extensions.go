@@ -19,9 +19,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/CS-SI/SafeScale/providers/model/enums/HostProperties"
 	"github.com/sirupsen/logrus"
-	"strconv"
 )
 
 // extensions ...
@@ -41,6 +39,14 @@ func NewExtensions() *Extensions {
 
 // Lookup tells if a key is present in Extensions
 func (x *Extensions) Lookup(key string) bool {
+	if x == nil {
+		panic("Nil Extensions")
+	}
+
+	if x.extensions == nil {
+		panic("Nil Extensions.extensions")
+	}
+
 	_, ok := x.extensions[key]
 	return ok
 }
@@ -59,17 +65,12 @@ func (x *Extensions) Get(key string, value interface{}) error {
 	if jsoned, ok := x.extensions[key]; ok {
 		return json.Unmarshal([]byte(jsoned), value)
 	} else {
-		k, err := strconv.Atoi(key)
-		if err == nil {
-			nf := HostProperties.Enum(k)
-			logrus.Debugf("Unable to unmarshal key '%s', not found", nf.String())
-		} else {
-			logrus.Debugf("Unable to unmarshal key '%s', not found", key)
-		}
+		logrus.Debugf("Unable to unmarshal key '%s', not found", key)
 	}
 
 	return nil
 }
+
 
 func (x *Extensions) SafeGet(key string, value interface{}) error {
 	if x == nil {
@@ -84,17 +85,19 @@ func (x *Extensions) SafeGet(key string, value interface{}) error {
 		return json.Unmarshal([]byte(jsoned), value)
 	}
 
-	k, err := strconv.Atoi(key)
-	if err == nil {
-		nf := HostProperties.Enum(k)
-		return fmt.Errorf("Unable to unmarshal key '%s', not found", nf.String())
-	} else {
-		return fmt.Errorf("Unable to unmarshal key '%s', not found", key)
-	}
+	return fmt.Errorf("Unable to unmarshal key '%s', not found", key)
 }
 
 // Set adds/replaces the content of key 'key' with 'value'
 func (x *Extensions) Set(key string, value interface{}) error {
+	if x == nil {
+		panic("Nil Extensions")
+	}
+
+	if x.extensions == nil {
+		panic("Nil Extensions.extensions")
+	}
+
 	encoded, err := json.Marshal(value)
 	if err != nil {
 		return err

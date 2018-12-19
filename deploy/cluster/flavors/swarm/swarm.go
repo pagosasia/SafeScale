@@ -129,10 +129,10 @@ func Load(data *metadata.Cluster) (*Cluster, error) {
 	if data == nil {
 		panic("data")
 	}
-	core := data.Get()
-	core.Service = data.GetService()
+	cores := data.Get()
+	cores.Service = data.GetService()
 	instance := &Cluster{
-		Core:     core,
+		Core:     cores,
 		metadata: data,
 	}
 

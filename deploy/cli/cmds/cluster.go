@@ -151,25 +151,25 @@ var clusterListCommand = cli.Command{
 
 // formatClusterConfig...
 func formatClusterConfig(value interface{}) map[string]interface{} {
-	core := value.(map[string]interface{})
-	e := Flavor.Enum(int(core["flavor"].(float64)))
-	core["flavor_label"] = e.String()
+	cores := value.(map[string]interface{})
+	e := Flavor.Enum(int(cores["flavor"].(float64)))
+	cores["flavor_label"] = e.String()
 
-	c := Complexity.Enum(int(core["complexity"].(float64)))
-	core["complexity_label"] = c.String()
+	c := Complexity.Enum(int(cores["complexity"].(float64)))
+	cores["complexity_label"] = c.String()
 
-	s := ClusterState.Enum(int(core["state"].(float64)))
-	core["state_label"] = s.String()
+	s := ClusterState.Enum(int(cores["state"].(float64)))
+	cores["state_label"] = s.String()
 
 	if !Debug {
-		delete(core, "infos")
-		delete(core, "extensions")
-		delete(core, "private_node_ids")
-		delete(core, "public_node_ids")
-		delete(core, "keypair")
+		delete(cores, "infos")
+		delete(cores, "extensions")
+		delete(cores, "private_node_ids")
+		delete(cores, "public_node_ids")
+		delete(cores, "keypair")
 	}
 
-	return core
+	return cores
 }
 
 // clusterInspectCmd handles 'deploy cluster <clustername> inspect'
@@ -1159,8 +1159,8 @@ var clusterNodeListCommand = cli.Command{
 
 // formatNodeConfig...
 func formatNodeConfig(value interface{}) map[string]interface{} {
-	core := value.(map[string]interface{})
-	return core
+	cores := value.(map[string]interface{})
+	return cores
 }
 
 // clusterNodeInspectCmd handles 'deploy cluster <clustername> inspect'

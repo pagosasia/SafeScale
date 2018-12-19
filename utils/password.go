@@ -29,11 +29,11 @@ func GeneratePassword(length uint8) (string, error) {
 	if length < 12 {
 		panic("length under 12!")
 	}
-	password, err := generator.Generate(int(length), 4, 4, false, true)
+	passw, err := generator.Generate(int(length), 4, 4, false, true)
 	if err != nil {
 		return "", err
 	}
-	return password, nil
+	return passw, nil
 }
 
 func init() {

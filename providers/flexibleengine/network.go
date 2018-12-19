@@ -131,11 +131,11 @@ func (client *Client) CreateVPC(req VPCRequest) (*VPC, error) {
 func (client *Client) findVPCBindedNetwork(vpcName string) (*networks.Network, error) {
 	var router *openstack.Router
 	found := false
-	routers, err := client.osclt.ListRouters()
+	routerList, err := client.osclt.ListRouters()
 	if err != nil {
 		return nil, fmt.Errorf("failed to list routers: %s", openstack.ProviderErrorToString(err))
 	}
-	for _, r := range routers {
+	for _, r := range routerList {
 		if r.Name == vpcName {
 			found = true
 			router = &r
@@ -269,9 +269,9 @@ func (client *Client) GetNetworkByName(name string) (*model.Network, error) {
 	if r.Err != nil {
 		return nil, fmt.Errorf("query for network '%s' failed: %v", name, r.Err)
 	}
-	subnets, found := r.Body.(map[string]interface{})["subnets"].([]interface{})
-	if found && len(subnets) > 0 {
-		entry := subnets[0].(map[string]interface{})
+	subnetList, found := r.Body.(map[string]interface{})["subnets"].([]interface{})
+	if found && len(subnetList) > 0 {
+		entry := subnetList[0].(map[string]interface{})
 		id := entry["id"].(string)
 		return client.GetNetwork(id)
 	}
@@ -291,12 +291,12 @@ func (client *Client) GetNetwork(id string) (*model.Network, error) {
 		return nil, model.ResourceNotFoundError("subnet", id)
 	}
 
-	net := model.NewNetwork()
-	net.ID = subnet.ID
-	net.Name = subnet.Name
-	net.CIDR = subnet.CIDR
-	net.IPVersion = fromIntIPVersion(subnet.IPVersion)
-	return net, nil
+	network := model.NewNetwork()
+	network.ID = subnet.ID
+	network.Name = subnet.Name
+	network.CIDR = subnet.CIDR
+	network.IPVersion = fromIntIPVersion(subnet.IPVersion)
+	return network, nil
 }
 
 // ListNetworks lists networks
@@ -307,12 +307,12 @@ func (client *Client) ListNetworks() ([]*model.Network, error) {
 	}
 	var networkList []*model.Network
 	for _, subnet := range *subnetList {
-		net := model.NewNetwork()
-		net.ID = subnet.ID
-		net.Name = subnet.Name
-		net.CIDR = subnet.CIDR
-		net.IPVersion = fromIntIPVersion(subnet.IPVersion)
-		networkList = append(networkList, net)
+		network := model.NewNetwork()
+		network.ID = subnet.ID
+		network.Name = subnet.Name
+		network.CIDR = subnet.CIDR
+		network.IPVersion = fromIntIPVersion(subnet.IPVersion)
+		networkList = append(networkList, network)
 	}
 	return networkList, nil
 }
@@ -392,11 +392,11 @@ func (client *Client) createSubnet(name string, cidr string) (*subnets.Subnet, e
 	network, networkDesc, _ := net.ParseCIDR(cidr)
 
 	// Validates CIDR regarding the existing subnets
-	subnets, err := client.listSubnets()
+	subnetList, err := client.listSubnets()
 	if err != nil {
 		return nil, err
 	}
-	for _, s := range *subnets {
+	for _, s := range *subnetList {
 		_, sDesc, _ := net.ParseCIDR(s.CIDR)
 		if cidrIntersects(networkDesc, sDesc) {
 			return nil, fmt.Errorf("can't create subnet '%s (%s)', would intersect with '%s (%s)'", name, cidr, s.Name, s.CIDR)

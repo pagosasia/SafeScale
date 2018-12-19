@@ -133,12 +133,12 @@ func (client *Client) CreateNetwork(req model.NetworkRequest) (*model.Network, e
 		}
 	}()
 
-	net := model.NewNetwork()
-	net.ID = network.ID
-	net.Name = network.Name
-	net.CIDR = subnet.Mask
-	net.IPVersion = subnet.IPVersion
-	return net, nil
+	anet := model.NewNetwork()
+	anet.ID = network.ID
+	anet.Name = network.Name
+	anet.CIDR = subnet.Mask
+	anet.IPVersion = subnet.IPVersion
+	return anet, nil
 }
 
 // GetNetworkByName ...
@@ -203,13 +203,13 @@ func (client *Client) GetNetwork(id string) (*model.Network, error) {
 		// if err != nil {
 		// 	return nil, fmt.Errorf("Bad configuration, no gateway associated to this network")
 		// }
-		net := model.NewNetwork()
-		net.ID = network.ID
-		net.Name = network.Name
-		net.CIDR = sn.Mask
-		net.IPVersion = sn.IPVersion
+		anet := model.NewNetwork()
+		anet.ID = network.ID
+		anet.Name = network.Name
+		anet.CIDR = sn.Mask
+		anet.IPVersion = sn.IPVersion
 		//net.GatewayID = network.GatewayId
-		return net, nil
+		return anet, nil
 	}
 
 	// // Last chance, we look at all network
@@ -261,13 +261,13 @@ func (client *Client) ListNetworks() ([]*model.Network, error) {
 				}
 				sn := sns[0]
 
-				net := model.NewNetwork()
-				net.ID = n.ID
-				net.Name = n.Name
-				net.CIDR = sn.Mask
-				net.IPVersion = sn.IPVersion
+				anet := model.NewNetwork()
+				anet.ID = n.ID
+				anet.Name = n.Name
+				anet.CIDR = sn.Mask
+				anet.IPVersion = sn.IPVersion
 				// GatewayID: gwID,
-				netList = append(netList, net)
+				netList = append(netList, anet)
 			}
 			return true, nil
 		},

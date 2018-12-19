@@ -135,9 +135,9 @@ func Load(data *metadata.Cluster) (*Cluster, error) {
 		panic("data is nil!")
 	}
 
-	core := data.Get()
+	cores := data.Get()
 	instance := &Cluster{
-		Core:     core,
+		Core:     cores,
 		metadata: data,
 	}
 	instance.reset()

@@ -142,13 +142,13 @@ func httpProxyFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url, err := getServiceURL(info.service, info.resource)
+	aurl, err := getServiceURL(info.service, info.resource)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadGateway), http.StatusBadGateway)
 		return
 	}
 
-	httpForward(w, r, url)
+	httpForward(w, r, aurl)
 
 }
 
@@ -212,13 +212,13 @@ func wsProxyFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url, err := getServiceURL(info.service, info.resource)
+	aurl, err := getServiceURL(info.service, info.resource)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadGateway), http.StatusBadGateway)
 		return
 	}
 	header := http.Header{}
-	cDest, _, err := websocket.DefaultDialer.Dial(url.String(), header)
+	cDest, _, err := websocket.DefaultDialer.Dial(aurl.String(), header)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusBadGateway), http.StatusBadGateway)
 		return

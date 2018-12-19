@@ -203,14 +203,14 @@ func initObjectStorageLocationConfig(tenant map[string]interface{}) (objectstora
 
 	identity, _ := tenant["identity"].(map[string]interface{})
 	compute, _ := tenant["compute"].(map[string]interface{})
-	objectstorage, _ := tenant["objectstorage"].(map[string]interface{})
+	objStorage, _ := tenant["objectstorage"].(map[string]interface{})
 
-	if config.Type, ok = objectstorage["Type"].(string); !ok {
+	if config.Type, ok = objStorage["Type"].(string); !ok {
 		return config, fmt.Errorf("missing setting 'Type' in 'metadata' section")
 	}
 
-	if config.Domain, ok = objectstorage["Domain"].(string); !ok {
-		if config.Domain, ok = objectstorage["DomainName"].(string); !ok {
+	if config.Domain, ok = objStorage["Domain"].(string); !ok {
+		if config.Domain, ok = objStorage["DomainName"].(string); !ok {
 			if config.Domain, ok = compute["Domain"].(string); !ok {
 				if config.Domain, ok = compute["DomainName"].(string); !ok {
 					if config.Domain, ok = identity["Domain"].(string); !ok {
@@ -224,9 +224,9 @@ func initObjectStorageLocationConfig(tenant map[string]interface{}) (objectstora
 	}
 	config.TenantDomain = config.Domain
 
-	if config.Tenant, ok = objectstorage["Tenant"].(string); !ok {
-		if config.Tenant, ok = objectstorage["ProjectName"].(string); !ok {
-			if config.Tenant, ok = objectstorage["ProjectID"].(string); !ok {
+	if config.Tenant, ok = objStorage["Tenant"].(string); !ok {
+		if config.Tenant, ok = objStorage["ProjectName"].(string); !ok {
+			if config.Tenant, ok = objStorage["ProjectID"].(string); !ok {
 				if config.Tenant, ok = compute["ProjectName"].(string); !ok {
 					if config.Tenant, ok = compute["ProjectID"].(string); !ok {
 						log.Debugf("Failure setting 'Project ID' aliases")
@@ -236,17 +236,17 @@ func initObjectStorageLocationConfig(tenant map[string]interface{}) (objectstora
 		}
 	}
 
-	if config.AuthURL, ok = objectstorage["AuthURL"].(string); !ok {
+	if config.AuthURL, ok = objStorage["AuthURL"].(string); !ok {
 		log.Debugf("Failure setting 'AuthURL' aliases")
 	}
 
-	if config.Endpoint, ok  = objectstorage["Endpoint"].(string); !ok {
+	if config.Endpoint, ok  = objStorage["Endpoint"].(string); !ok {
 		log.Debugf("Failure setting 'Endpoint' aliases")
 	}
 
-	if config.User, ok = objectstorage["AccessKey"].(string); !ok {
-		if config.User, ok = objectstorage["OpenStackID"].(string); !ok {
-			if config.User, ok = objectstorage["Username"].(string); !ok {
+	if config.User, ok = objStorage["AccessKey"].(string); !ok {
+		if config.User, ok = objStorage["OpenStackID"].(string); !ok {
+			if config.User, ok = objStorage["Username"].(string); !ok {
 				if config.User, ok = identity["OpenstackID"].(string); !ok {
 					if config.User, ok = identity["Username"].(string); !ok {
 						log.Debugf("Failure setting 'User Name' aliases")
@@ -256,15 +256,15 @@ func initObjectStorageLocationConfig(tenant map[string]interface{}) (objectstora
 		}
 	}
 
-	if config.Key, ok = objectstorage["ApplicationKey"].(string); !ok {
+	if config.Key, ok = objStorage["ApplicationKey"].(string); !ok {
 		if config.Key, ok = identity["ApplicationKey"].(string); !ok {
 			log.Debugf("Failure setting 'ApplicationKey' aliases")
 		}
 	}
 
-	if config.SecretKey, ok = objectstorage["SecretKey"].(string); !ok {
-		if config.SecretKey, ok = objectstorage["OpenstackPassword"].(string); !ok {
-			if config.SecretKey, ok = objectstorage["Password"].(string); !ok {
+	if config.SecretKey, ok = objStorage["SecretKey"].(string); !ok {
+		if config.SecretKey, ok = objStorage["OpenstackPassword"].(string); !ok {
+			if config.SecretKey, ok = objStorage["Password"].(string); !ok {
 				if config.SecretKey, ok = identity["SecretKey"].(string); !ok {
 					if config.SecretKey, ok = identity["OpenstackPassword"].(string); !ok {
 						if config.SecretKey, ok = identity["Password"].(string); !ok {
@@ -276,7 +276,7 @@ func initObjectStorageLocationConfig(tenant map[string]interface{}) (objectstora
 		}
 	}
 
-	if config.Region, ok = objectstorage["Region"].(string); !ok {
+	if config.Region, ok = objStorage["Region"].(string); !ok {
 		if config.Region, ok = compute["Region"].(string); !ok {
 			log.Debugf("Failure setting 'Region' aliases")
 		}
@@ -295,19 +295,19 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 	// TODO Log errors
 	identity, _ := tenant["identity"].(map[string]interface{})
 	compute, _ := tenant["compute"].(map[string]interface{})
-	objectstorage, _ := tenant["objectstorage"].(map[string]interface{})
+	objStorage, _ := tenant["objectstorage"].(map[string]interface{})
 	metadata, _ := tenant["metadata"].(map[string]interface{})
 
 	if config.Type, ok = metadata["Type"].(string); !ok {
-		if config.Type, ok = objectstorage["Type"].(string); !ok {
+		if config.Type, ok = objStorage["Type"].(string); !ok {
 			return config, fmt.Errorf("missing setting 'Type' in 'metadata' section")
 		}
 	}
 
 	if config.Domain, ok = metadata["Domain"].(string); !ok {
 		if config.Domain, ok = metadata["DomainName"].(string); !ok {
-			if config.Domain, ok = objectstorage["Domain"].(string); !ok {
-				if config.Domain, ok = objectstorage["DomainName"].(string); !ok {
+			if config.Domain, ok = objStorage["Domain"].(string); !ok {
+				if config.Domain, ok = objStorage["DomainName"].(string); !ok {
 					if config.Domain, ok = compute["Domain"].(string); !ok {
 						if config.Domain, ok = compute["DomainName"].(string); !ok {
 							if config.Domain, ok = identity["Domain"].(string); !ok {
@@ -326,9 +326,9 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 	if config.Tenant, ok = metadata["Tenant"].(string); !ok {
 		if config.Tenant, ok = metadata["ProjectName"].(string); !ok {
 			if config.Tenant, ok = metadata["ProjectID"].(string); !ok {
-				if config.Tenant, ok = objectstorage["Tenant"].(string); !ok {
-					if config.Tenant, ok = objectstorage["ProjectName"].(string); !ok {
-						if config.Tenant, ok = objectstorage["ProjectID"].(string); !ok {
+				if config.Tenant, ok = objStorage["Tenant"].(string); !ok {
+					if config.Tenant, ok = objStorage["ProjectName"].(string); !ok {
+						if config.Tenant, ok = objStorage["ProjectID"].(string); !ok {
 							if config.Tenant, ok = compute["Tenant"].(string); !ok {
 								if config.Tenant, ok = compute["ProjectName"].(string); !ok {
 									if config.Tenant, ok = compute["ProjectID"].(string); ! ok {
@@ -344,19 +344,19 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 	}
 
 	if config.AuthURL, ok = metadata["AuthURL"].(string); !ok {
-		config.AuthURL, _ = objectstorage["AuthURL"].(string)
+		config.AuthURL, _ = objStorage["AuthURL"].(string)
 	}
 
 	if config.Endpoint, ok = metadata["Endpoint"].(string); !ok {
-		config.Endpoint, _ = objectstorage["Endpoint"].(string)
+		config.Endpoint, _ = objStorage["Endpoint"].(string)
 	}
 
 	if config.User, ok = metadata["AccessKey"].(string); !ok {
 		if config.User, ok = metadata["OpenstackID"].(string); !ok {
 			if config.User, ok = metadata["Username"].(string); !ok {
-				if config.User, ok = objectstorage["AccessKey"].(string); !ok {
-					if config.User, ok = objectstorage["OpenStackID"].(string); !ok {
-						if config.User, ok = objectstorage["Username"].(string); !ok {
+				if config.User, ok = objStorage["AccessKey"].(string); !ok {
+					if config.User, ok = objStorage["OpenStackID"].(string); !ok {
+						if config.User, ok = objStorage["Username"].(string); !ok {
 							if config.User, ok = identity["Username"].(string); !ok {
 								config.User, _ = identity["OpenstackID"].(string)
 							}
@@ -368,7 +368,7 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 	}
 
 	if config.Key, ok = metadata["ApplicationKey"].(string); !ok {
-		if config.Key, ok = objectstorage["ApplicationKey"].(string); !ok {
+		if config.Key, ok = objStorage["ApplicationKey"].(string); !ok {
 			config.Key, _ = identity["ApplicationKey"].(string)
 		}
 	}
@@ -377,10 +377,10 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 		if config.SecretKey, ok = metadata["AccessPassword"].(string); !ok {
 			if config.SecretKey, ok = metadata["OpenstackPassword"].(string); !ok {
 				if config.SecretKey, ok = metadata["Password"].(string); !ok {
-					if config.SecretKey, ok = objectstorage["SecretKey"].(string); !ok {
-						if config.SecretKey, ok = objectstorage["AccessPassword"].(string); !ok {
-							if config.SecretKey, ok = objectstorage["OpenstackPassword"].(string); !ok {
-								if config.SecretKey, ok = objectstorage["Password"].(string); !ok {
+					if config.SecretKey, ok = objStorage["SecretKey"].(string); !ok {
+						if config.SecretKey, ok = objStorage["AccessPassword"].(string); !ok {
+							if config.SecretKey, ok = objStorage["OpenstackPassword"].(string); !ok {
+								if config.SecretKey, ok = objStorage["Password"].(string); !ok {
 									if config.SecretKey, ok = identity["SecretKey"].(string); !ok {
 										if config.SecretKey, ok = identity["AccessPassword"].(string); !ok {
 											if config.SecretKey, ok = identity["Password"].(string); !ok {
@@ -398,7 +398,7 @@ func initMetadataLocationConfig(tenant map[string]interface{}) (objectstorage.Co
 	}
 
 	if config.Region, ok = metadata["Region"].(string); !ok {
-		if config.Region, ok = objectstorage["Region"].(string); !ok {
+		if config.Region, ok = objStorage["Region"].(string); !ok {
 			config.Region, _ = compute["Region"].(string)
 		}
 	}

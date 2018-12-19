@@ -663,9 +663,9 @@ func (client *Client) GetHostByName(name string) (*model.Host, error) {
 	if r.Err != nil {
 		return nil, fmt.Errorf("failed to get data of host '%s': %v", name, r.Err)
 	}
-	servers, found := r.Body.(map[string]interface{})["servers"].([]interface{})
-	if found && len(servers) > 0 {
-		for _, anon := range servers {
+	servs, found := r.Body.(map[string]interface{})["servers"].([]interface{})
+	if found && len(servs) > 0 {
+		for _, anon := range servs {
 			entry := anon.(map[string]interface{})
 			if entry["name"].(string) == name {
 				host := model.NewHost()
@@ -719,7 +719,7 @@ func (client *Client) CreateHost(request model.HostRequest) (*model.Host, error)
 	defaultNetwork := request.Networks[0]
 	defaultNetworkID := defaultNetwork.ID
 	defaultGateway := request.DefaultGateway
-	isGateway := (defaultGateway == nil && defaultNetwork.Name != model.SingleHostNetworkName)
+	isGateway := defaultGateway == nil && defaultNetwork.Name != model.SingleHostNetworkName
 	defaultGatewayID := ""
 	defaultGatewayPrivateIP := ""
 	if defaultGateway != nil {
@@ -786,11 +786,11 @@ func (client *Client) CreateHost(request model.HostRequest) (*model.Host, error)
 	if err != nil {
 		return nil, err
 	}
-	var az string
-	for az = range azList {
+	var avail string
+	for avail = range azList {
 		break
 	}
-	log.Debugf("Selected Availability Zone: '%s'", az)
+	log.Debugf("Selected Availability Zone: '%s'", avail)
 
 	// Sets provider parameters to create host
 	srvOpts := servers.CreateOpts{
@@ -800,7 +800,7 @@ func (client *Client) CreateHost(request model.HostRequest) (*model.Host, error)
 		FlavorRef:        request.TemplateID,
 		ImageRef:         request.ImageID,
 		UserData:         userData,
-		AvailabilityZone: az,
+		AvailabilityZone: avail,
 	}
 
 	// --- Initializes model.Host ---

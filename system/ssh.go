@@ -159,9 +159,9 @@ func (tunnel *SSHTunnel) Close() error {
 		return fmt.Errorf("Unable to close tunnel :%s", err.Error())
 	}
 	// Kills remaining processes if there are some
-	bytes, err := exec.Command("pgrep", "-f", tunnel.cmdString).Output()
+	bytess, err := exec.Command("pgrep", "-f", tunnel.cmdString).Output()
 	if err == nil {
-		portStr := strings.Trim(string(bytes), "\n")
+		portStr := strings.Trim(string(bytess), "\n")
 		_, err = strconv.Atoi(portStr)
 		if err == nil {
 			err = exec.Command("kill", "-9", portStr).Run()

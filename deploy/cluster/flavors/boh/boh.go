@@ -132,10 +132,10 @@ func (c *Cluster) CountNodes(public bool) uint {
 
 // Load loads the internals of an existing cluster from metadata
 func Load(data *metadata.Cluster) (*Cluster, error) {
-	core := data.Get()
-	core.Service = data.GetService()
+	cores := data.Get()
+	cores.Service = data.GetService()
 	instance := &Cluster{
-		Core:     core,
+		Core:     cores,
 		metadata: data,
 	}
 	instance.reset()

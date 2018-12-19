@@ -234,16 +234,16 @@ func (opts serverCreateOpts) ToServerCreateMap() (map[string]interface{}, error)
 
 	if len(opts.Networks) > 0 {
 		networks := make([]map[string]interface{}, len(opts.Networks))
-		for i, net := range opts.Networks {
+		for i, nets := range opts.Networks {
 			networks[i] = make(map[string]interface{})
-			if net.UUID != "" {
-				networks[i]["uuid"] = net.UUID
+			if nets.UUID != "" {
+				networks[i]["uuid"] = nets.UUID
 			}
-			if net.Port != "" {
-				networks[i]["port"] = net.Port
+			if nets.Port != "" {
+				networks[i]["port"] = nets.Port
 			}
-			if net.FixedIP != "" {
-				networks[i]["fixed_ip"] = net.FixedIP
+			if nets.FixedIP != "" {
+				networks[i]["fixed_ip"] = nets.FixedIP
 			}
 		}
 		b["networks"] = networks
@@ -545,9 +545,9 @@ func validatehostName(req model.HostRequest) (bool, error) {
 
 	e := s.Validate(req)
 	if e.HasErrors() {
-		errors, _ := e.GetErrorsByKey("ResourceName")
+		resourceErrors, _ := e.GetErrorsByKey("ResourceName")
 		var errs []string
-		for _, msg := range errors {
+		for _, msg := range resourceErrors {
 			errs = append(errs, msg.Error())
 		}
 		return false, fmt.Errorf(strings.Join(errs, " + "))
@@ -733,13 +733,13 @@ func (client *Client) complementHost(host *model.Host, server *servers.Server) e
 	// Updates network name and relationships if needed
 	for netid, netname := range hostNetworkV1.NetworksByID {
 		if netname == "" {
-			net, err := client.GetNetwork(netid)
+			nets, err := client.GetNetwork(netid)
 			if err != nil {
 				log.Errorf("failed to get network '%s'", netid)
 				continue
 			}
-			hostNetworkV1.NetworksByID[netid] = net.Name
-			hostNetworkV1.NetworksByName[net.Name] = netid
+			hostNetworkV1.NetworksByID[netid] = nets.Name
+			hostNetworkV1.NetworksByName[nets.Name] = netid
 		}
 	}
 

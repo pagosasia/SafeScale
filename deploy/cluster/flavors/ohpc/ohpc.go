@@ -137,9 +137,9 @@ func (c *Cluster) CountNodes(public bool) uint {
 
 // Load loads the internals of an existing cluster from metadata
 func Load(data *metadata.Cluster) (clusterapi.Cluster, error) {
-	core := data.Get()
+	cores := data.Get()
 	instance := &Cluster{
-		Core:     core,
+		Core:     cores,
 		metadata: data,
 	}
 	instance.reset()
@@ -416,11 +416,11 @@ func Create(req core.Request) (*Cluster, error) {
 	// Get the state of the cluster until successful
 	err = retry.WhileUnsuccessfulDelay5Seconds(
 		func() error {
-			status, err := instance.ForceGetState()
+			stat, err := instance.ForceGetState()
 			if err != nil {
 				return err
 			}
-			if status != ClusterState.Nominal {
+			if stat != ClusterState.Nominal {
 				return fmt.Errorf("cluster is not ready for duty")
 			}
 			return nil
